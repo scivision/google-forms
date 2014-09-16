@@ -73,7 +73,7 @@ if __name__ == '__main__':
     p.add_argument('--p3',help='list who picked for project three this project choice',type=str,default=None)
     p.add_argument('--full',help='print maximum amount of detail about respondant',action='store_true')
     p.add_argument('--pie',help='Pie Chart of choices',action='store_true')
-    p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int,default=1)
+    p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int,default=None)
 
     ar = p.parse_args()
     pick = [ar.p1, ar.p2, ar.p3]
