@@ -10,7 +10,7 @@ http://stackoverflow.com/questions/22093006/python-pandas-filter-dataframe-by-ap
 http://pandas.pydata.org/pandas-docs/version/0.8.1/missing_data.html
 '''
 
-def analyzeForms(xlsfn,mplots,pick,req):
+def analyzeForms(xlsfn,req,pick):
     pd.options.display.max_colwidth=17
 
     data = pd.read_excel(expanduser(xlsfn),sheetname='choices')
@@ -27,11 +27,15 @@ def analyzeForms(xlsfn,mplots,pick,req):
         projdata.ix[i,'vote1'] = sum(data['choice one'] == proj)
         projdata.ix[i,'vote2'] = sum(data['choice two'] == proj)
         projdata.ix[i,'vote3'] = sum(data['choice three'] == proj)
+#%% did students get what they wanted?
+    if req.match:
+        match = np.sum(data['assignment'][:,np.newaxis] == data.ix[:,'choice one':'choice three'],axis=0)
+        print(match)
 
-    if req['totals'] is not None:
-        print(projdata.ix[:,1:].sort('vote' + str(req['totals']),ascending=False))
+    if req.totals is not None:
+        print(projdata.ix[:,1:].sort('vote' + str(req.totals),ascending=False))
 
-    if req['pie']:
+    if req.pie:
         makepie(projdata,'vote1')
         makepie(projdata,'vote2')
         makepie(projdata,'vote3')
@@ -44,7 +48,7 @@ def rechoice(data,choice,choicenum,req):
         dsl = data[ data[choicenum].str.contains(choice).fillna(False) ]
         nsl = dsl.shape[0]
         print(str(nsl) + ' students chose ' + choice + ' as ' + choicenum)
-        if req['full']:
+        if req.full:
             print(dsl.ix[:,1:].to_string(justify='left'))
         else:
             print(dsl.ix[:,1:3].to_string(justify='left'))
@@ -66,7 +70,6 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='Loads Google Forms responses XLS and analyses')
     p.add_argument('-i','--infile',help='.xls filename with Google Forms responses',type=str,required=True)
-    p.add_argument('-p','--plot',help='list plots you want made',nargs='+',default=[None],type=str)
     p.add_argument('--profile',help='profile performance',action='store_true')
     p.add_argument('--p1',help='list who picked for project one this project choice',type=str,default=None)
     p.add_argument('--p2',help='list who picked for project two this project choice',type=str,default=None)
@@ -74,21 +77,18 @@ if __name__ == '__main__':
     p.add_argument('--full',help='print maximum amount of detail about respondant',action='store_true')
     p.add_argument('--pie',help='Pie Chart of choices',action='store_true')
     p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int,default=None)
+    p.add_argument('--match',help='show student assignment vs request',action='store_true')
 
     ar = p.parse_args()
     pick = [ar.p1, ar.p2, ar.p3]
-    req = dict()
-    req['full'] = ar.full
-    req['pie'] = ar.pie
-    req['totals'] = ar.totals
 
     if ar.profile:
         import cProfile
         from readprofiler import goCprofile
         profFN = 'analyzeforms.pstats'
         print('saving profile results to ' + profFN)
-        cProfile.run('analyzeForms(ar.infile,ar.plot, pick, req)',profFN)
+        cProfile.run('analyzeForms(ar.infile,ar, pick)',profFN)
         goCprofile(profFN)
     else:
-        data = analyzeForms(ar.infile, ar.plot, pick,req)
+        data = analyzeForms(ar.infile, ar, pick)
         #print(data)
