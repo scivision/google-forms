@@ -22,15 +22,19 @@ def analyzeForms(xlsfn,mplots,pick,req):
     rechoice(data,pick[1],'choice two',req)
     rechoice(data,pick[2],'choice three',req)
 
-    if req['pie']:
-        for i,proj in enumerate(projdata['Name']):
-            projdata.ix[i,'voteOne'] = sum(data['choice one'] == proj)
-            projdata.ix[i,'voteTwo'] = sum(data['choice two'] == proj)
-            projdata.ix[i,'voteThree'] = sum(data['choice three'] == proj)
 
-        makepie(projdata,'voteOne')
-        makepie(projdata,'voteTwo')
-        makepie(projdata,'voteThree')
+    for i,proj in enumerate(projdata['Name']):
+        projdata.ix[i,'vote1'] = sum(data['choice one'] == proj)
+        projdata.ix[i,'vote2'] = sum(data['choice two'] == proj)
+        projdata.ix[i,'vote3'] = sum(data['choice three'] == proj)
+
+    if req['totals'] is not None:
+        print(projdata.sort('vote' + str(req['totals']),ascending=False))
+
+    if req['pie']:
+        makepie(projdata,'vote1')
+        makepie(projdata,'vote2')
+        makepie(projdata,'vote3')
 
     plt.show()
     return data
@@ -69,12 +73,14 @@ if __name__ == '__main__':
     p.add_argument('--p3',help='list who picked for project three this project choice',type=str,default=None)
     p.add_argument('--full',help='print maximum amount of detail about respondant',action='store_true')
     p.add_argument('--pie',help='Pie Chart of choices',action='store_true')
+    p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int,default=1)
 
     ar = p.parse_args()
     pick = [ar.p1, ar.p2, ar.p3]
     req = dict()
     req['full'] = ar.full
     req['pie'] = ar.pie
+    req['totals'] = ar.totals
 
     if ar.profile:
         import cProfile
