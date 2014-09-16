@@ -29,7 +29,7 @@ def analyzeForms(xlsfn,mplots,pick,req):
         projdata.ix[i,'vote3'] = sum(data['choice three'] == proj)
 
     if req['totals'] is not None:
-        print(projdata.sort('vote' + str(req['totals']),ascending=False))
+        print(projdata.ix[:,1:].sort('vote' + str(req['totals']),ascending=False))
 
     if req['pie']:
         makepie(projdata,'vote1')
