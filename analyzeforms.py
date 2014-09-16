@@ -29,8 +29,11 @@ def analyzeForms(xlsfn,req,pick):
         projdata.ix[i,'vote3'] = sum(data['choice three'] == proj)
 #%% did students get what they wanted?
     if req.match:
-        match = np.sum(data['assignment'][:,np.newaxis] == data.ix[:,'choice one':'choice three'],axis=0)
+        matchquery = data['assignment'][:,np.newaxis] == data.ix[:,'choice one':'choice three']
+        match = np.sum(matchquery,axis=0)
+        print(matchquery)
         print(match)
+
 
     if req.totals is not None:
         print(projdata.ix[:,1:].sort('vote' + str(req.totals),ascending=False))
