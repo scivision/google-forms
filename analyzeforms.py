@@ -24,15 +24,17 @@ def analyzeForms(xlsfn,req,pick):
 
 
     for i,proj in enumerate(projdata['Name']):
-        projdata.ix[i,'vote1'] = sum(data['choice one'] == proj)
-        projdata.ix[i,'vote2'] = sum(data['choice two'] == proj)
-        projdata.ix[i,'vote3'] = sum(data['choice three'] == proj)
+        projdata.ix[i,'vote1'] = (data['choice one'] == proj).sum()
+        projdata.ix[i,'vote2'] = (data['choice two'] == proj).sum()
+        projdata.ix[i,'vote3'] = (data['choice three'] == proj).sum()
 #%% did students get what they wanted?
     if req.match:
         matchquery = data['assignment'][:,np.newaxis] == data.ix[:,'choice one':'choice three']
-        match = np.sum(matchquery,axis=0)
+        match = matchquery.sum(axis=0)
+        #print(data.ix[np.where(matchquery)[0],'Username'])
         print(matchquery)
         print(match)
+
 
 
     if req.totals is not None:
