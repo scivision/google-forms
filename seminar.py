@@ -13,8 +13,8 @@ def analyzeForms(xlsfn):
 
     numone = (numeach==1).sum()
     numtwo = (numeach==2).sum()
-    print(numone)
-    print(numtwo)
+    print('students that attended exactly one seminar: ' + str(numone))
+    print('students that attended exactly two seminars: ' + str(numtwo))
 
     return data
 
