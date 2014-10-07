@@ -23,7 +23,7 @@ def analyzeForms(xlsfn):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='Analyzes attendance statistics')
-    p.add_argument('-i','--infile',help='.xls filename',type=str,required=True)
+    p.add_argument('infile',help='.xls filename',type=str)
     ar = p.parse_args()
 
     data = analyzeForms(ar.infile)
