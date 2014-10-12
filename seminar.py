@@ -9,14 +9,27 @@ def analyzeForms(xlsfn):
 
     data = pd.read_excel(expanduser(xlsfn))
 
-    numeach = data.ix[:,2:].sum(axis=1,numeric_only=True)
-
-    numone = (numeach==1).sum()
-    numtwo = (numeach==2).sum()
-    print('students that attended exactly one seminar: ' + str(numone))
-    print('students that attended exactly two seminars: ' + str(numtwo))
+    semrep(data)
 
     return data
+
+def semrep(data):
+    numeach = data.ix[:,3:].sum(axis=1,numeric_only=True)
+
+
+
+    print("students who have attended NO seminars yet: " + str(numeach.isnull().sum()))
+    print(*data.ix[numeach.isnull(),2].tolist(),sep=';')
+    print('------------------------------')
+
+
+    print('students that attended exactly one seminar: ' + str((numeach==1).sum()))
+    print(*data.ix[numeach==1,2].tolist(),sep=';')
+    print('------------------------------')
+
+    print('students that attended exactly two seminars: ' + str((numeach==2).sum()))
+    print(*data.ix[numeach==2,2].tolist(),sep=';')
+    print('------------------------------')
 
 
 
