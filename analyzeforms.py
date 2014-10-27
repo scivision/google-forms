@@ -74,7 +74,7 @@ def makepie(projdata,choice):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='Loads Google Forms responses XLS and analyses')
-    p.add_argument('-i','--infile',help='.xls filename with Google Forms responses',type=str,required=True)
+    p.add_argument('infile',help='.xls filename with Google Forms responses',type=str)
     p.add_argument('--profile',help='profile performance',action='store_true')
     p.add_argument('--p1',help='list who picked for project one this project choice',type=str,default=None)
     p.add_argument('--p2',help='list who picked for project two this project choice',type=str,default=None)
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     p.add_argument('--match',help='show student assignment vs request',action='store_true')
 
     ar = p.parse_args()
-    pick = [ar.p1, ar.p2, ar.p3]
+    pick = (ar.p1, ar.p2, ar.p3)
 
     if ar.profile:
         import cProfile
