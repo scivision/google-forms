@@ -3,7 +3,6 @@
 from __future__ import print_function
 import pandas as pd
 from os.path import expanduser, splitext
-#from numpy import s_,column_stack
 from easygui import fileopenbox
 #from pdb import set_trace
 
