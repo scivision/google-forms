@@ -74,14 +74,14 @@ def makepie(projdata,choice):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='Loads Google Forms responses XLS and analyses')
-    p.add_argument('infile',help='.xls filename with Google Forms responses',type=str)
+    p.add_argument('infile',help='.xls filename with Google Forms responses')
     p.add_argument('--profile',help='profile performance',action='store_true')
-    p.add_argument('--p1',help='list who picked for project one this project choice',type=str,default=None)
-    p.add_argument('--p2',help='list who picked for project two this project choice',type=str,default=None)
-    p.add_argument('--p3',help='list who picked for project three this project choice',type=str,default=None)
+    p.add_argument('--p1',help='list who picked for project one this project choice')
+    p.add_argument('--p2',help='list who picked for project two this project choice')
+    p.add_argument('--p3',help='list who picked for project three this project choice')
     p.add_argument('--full',help='print maximum amount of detail about respondant',action='store_true')
     p.add_argument('--pie',help='Pie Chart of choices',action='store_true')
-    p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int,default=None)
+    p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int)
     p.add_argument('--match',help='show student assignment vs request',action='store_true')
 
     ar = p.parse_args()
