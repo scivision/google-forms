@@ -3,12 +3,17 @@ import pandas as pd
 import numpy as np
 from os.path import expanduser
 import matplotlib.pyplot as plt
-from pdb import set_trace
-'''Michael Hirsch 2014
+
+"""
+Given spreadsheet with:
+sheets: choices, projects
+choices columns: choice one, choice two, choice three
+
+Michael Hirsch 2014
 Ref:
 http://stackoverflow.com/questions/22093006/python-pandas-filter-dataframe-by-applying-regular-expression
 http://pandas.pydata.org/pandas-docs/version/0.8.1/missing_data.html
-'''
+"""
 
 def analyzeForms(xlsfn,req,pick):
     pd.options.display.max_colwidth=17
