@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+from pathlib import Path
 import pandas as pd
 import numpy as np
-from os.path import expanduser
 import matplotlib.pyplot as plt
 
 """
@@ -15,11 +15,13 @@ http://stackoverflow.com/questions/22093006/python-pandas-filter-dataframe-by-ap
 http://pandas.pydata.org/pandas-docs/version/0.8.1/missing_data.html
 """
 
-def analyzeForms(xlsfn,req,pick):
+def analyzeForms(fn:Path, req, pick):
+    fn = Path(fn).expanduser()
+    
     pd.options.display.max_colwidth=17
 
-    data = pd.read_excel(expanduser(xlsfn),sheetname='choices')
-    projdata = pd.read_excel(expanduser(xlsfn),sheetname='projects')
+    data = pd.read_excel(fn, sheet_name='choices')
+    projdata = pd.read_excel(fn, sheet_name='projects')
 
 
     #this can be looped in a smarter way, but just for clarity...
@@ -58,7 +60,7 @@ def rechoice(data,choice,choicenum,req):
     if choice is not None:
         dsl = data[ data[choicenum].str.contains(choice).fillna(False) ]
         nsl = dsl.shape[0]
-        print(str(nsl) + ' students chose ' + choice + ' as ' + choicenum)
+        print(nsl,'students chose',choice,'as',choicenum)
         if req.full:
             print(dsl.ix[:,1:].to_string(justify='left'))
         else:
@@ -70,7 +72,7 @@ def makepie(projdata,choice):
     #data.hist(column=['choice one'])
     # show integer totals
     projsum = sum(projdata[choice])
-    apct = lambda p: '{:.0f}'.format(p * (projsum / 100))
+    apct = lambda p: f'{p * (projsum / 100):.0f}'
     cmap = plt.cm.jet
     colors = cmap(np.linspace(0,1,projdata.shape[0]))
 
@@ -91,16 +93,8 @@ if __name__ == '__main__':
     p.add_argument('--totals',help='print totals for 1,2,3 choice',type=int)
     p.add_argument('--match',help='show student assignment vs request',action='store_true')
 
-    ar = p.parse_args()
-    pick = (ar.p1, ar.p2, ar.p3)
+    p = p.parse_args()
+    pick = (p.p1, p.p2, p.p3)
 
-    if ar.profile:
-        import cProfile
-        from readprofiler import goCprofile
-        profFN = 'analyzeforms.pstats'
-        print('saving profile results to ' + profFN)
-        cProfile.run('analyzeForms(ar.infile,ar, pick)',profFN)
-        goCprofile(profFN)
-    else:
-        data = analyzeForms(ar.infile, ar, pick)
-        #print(data)
+    data = analyzeForms(p.infile, p, pick)
+ 

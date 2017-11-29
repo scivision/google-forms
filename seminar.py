@@ -1,22 +1,20 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-from __future__ import print_function
+#!/usr/bin/env python
+from pathlib import Path
 import pandas as pd
-from os.path import expanduser, splitext
-from easygui import fileopenbox
-#from pdb import set_trace
 
+pd.options.display.max_colwidth=17
 '''Michael Hirsch 2014
 analyses Blackboard Grading Center results
 '''
 
-def analyzeForms(fn,name,email):
-    pd.options.display.max_colwidth=17
-    ext = splitext(fn)[1]
-    if ext == '.xls' or ext == '.xlsx':
-        data = pd.read_excel(expanduser(fn))
+def analyzeForms(fn:Path, name, email):
+    fn = Path(fn).expanduser()
+    
+    ext = fn.suffix
+    if ext in ('.xls','.xlsx'):
+        data = pd.read_excel(fn)
     elif ext == '.csv':
-        data = pd.read_csv(expanduser(fn))
+        data = pd.read_csv(fn)
 
     semrep(data,name,email)
 
@@ -59,15 +57,12 @@ def semrep(data,name,email):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='Analyzes Blackboard Learn statistics')
-    p.add_argument('infile',help='.xls filename',type=str,nargs='?',default=None)
+    p.add_argument('infile',help='.xls filename')
     p.add_argument('--name',help='print name instead of email',action='store_true')
-    p.add_argument('-e','--email',help='text to append to end of username to make complete email address',default='',type=str)
-    ar = p.parse_args()
+    p.add_argument('-e','--email',help='text to append to end of username to make complete email address',default='')
+    p = p.parse_args()
 
-    if ar.infile is None:
-        fn = fileopenbox('select seminar file',default='*.csv')
-    else:
-        fn = ar.infile
+    fn = p.infile
 
 
-    analyzeForms(fn,ar.name,ar.email)
+    analyzeForms(fn, p.name, p.email)
