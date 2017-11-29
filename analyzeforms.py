@@ -36,7 +36,7 @@ def analyzeForms(xlsfn,req,pick):
     if req.match:
         matchquery = data['assignment'][:,np.newaxis] == data.ix[:,'choice one':'choice three']
         match = matchquery.sum(axis=0)
-        #print(data.ix[np.where(matchquery)[0],'Username'])
+        #print(data.ix[matchquery,'Username'])
         print(matchquery)
         print(match)
 
@@ -53,6 +53,7 @@ def analyzeForms(xlsfn,req,pick):
     plt.show()
     return data
 
+
 def rechoice(data,choice,choicenum,req):
     if choice is not None:
         dsl = data[ data[choicenum].str.contains(choice).fillna(False) ]
@@ -62,6 +63,7 @@ def rechoice(data,choice,choicenum,req):
             print(dsl.ix[:,1:].to_string(justify='left'))
         else:
             print(dsl.ix[:,1:3].to_string(justify='left'))
+
 
 def makepie(projdata,choice):
     ax = plt.figure().gca()
