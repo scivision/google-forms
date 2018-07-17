@@ -1,4 +1,3 @@
-google-forms
-============
+# google-forms
 
-Simple analysis of Google Forms results
+Analysis of Google Forms results
