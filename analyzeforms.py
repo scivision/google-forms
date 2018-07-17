@@ -16,7 +16,7 @@ http://pandas.pydata.org/pandas-docs/version/0.8.1/missing_data.html
 """
 
 
-def analyzeForms(fn: Path, req, pick):
+def analyzeForms(fn: Path, req, pick: tuple) -> pd.DataFrame:
     fn = Path(fn).expanduser()
 
     pd.options.display.max_colwidth = 17
@@ -35,7 +35,7 @@ def analyzeForms(fn: Path, req, pick):
         projdata.ix[i, 'vote3'] = (data['choice three'] == proj).sum()
 # %% did students get what they wanted?
     if req.match:
-        matchquery = data['assignment'][:, np.newaxis] == data.ix[:, 'choice one':'choice three']
+        matchquery = data['assignment'][:, None] == data.ix[:, 'choice one':'choice three']  # type: ignore
         match = matchquery.sum(axis=0)
         # print(data.ix[matchquery,'Username'])
         print(matchquery)
@@ -50,10 +50,11 @@ def analyzeForms(fn: Path, req, pick):
         makepie(projdata, 'vote3')
 
     plt.show()
+
     return data
 
 
-def rechoice(data, choice, choicenum, req):
+def rechoice(data: pd.DataFrame, choice: str, choicenum: str, req):
     if choice is not None:
         dsl = data[data[choicenum].str.contains(choice).fillna(False)]
         nsl = dsl.shape[0]
@@ -64,7 +65,7 @@ def rechoice(data, choice, choicenum, req):
             print(dsl.ix[:, 1:3].to_string(justify='left'))
 
 
-def makepie(projdata, choice):
+def makepie(projdata: pd.DataFrame, choice: str):
     ax = plt.figure().gca()
     # data.hist(column=['choice one'])
     # show integer totals
@@ -91,7 +92,7 @@ if __name__ == '__main__':
     p.add_argument('--totals', help='print totals for 1,2,3 choice', type=int)
     p.add_argument('--match', help='show student assignment vs request', action='store_true')
 
-    p = p.parse_args()
-    pick = (p.p1, p.p2, p.p3)
+    P = p.parse_args()
+    pick = (P.p1, P.p2, P.p3)
 
-    data = analyzeForms(p.infile, p, pick)
+    data = analyzeForms(P.infile, P, pick)

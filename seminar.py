@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from pathlib import Path
 import pandas as pd
+from typing import Union, List
 
 pd.options.display.max_colwidth = 17
 '''Michael Hirsch 2014
@@ -8,7 +9,7 @@ analyses Blackboard Grading Center results
 '''
 
 
-def analyzeForms(fn: Path, name, email):
+def analyzeForms(fn: Path, name: str, email: str):
     fn = Path(fn).expanduser()
 
     ext = fn.suffix
@@ -22,7 +23,7 @@ def analyzeForms(fn: Path, name, email):
     return data
 
 
-def semrep(data, name, email):
+def semrep(data: pd.DataFrame, name: str, email: str):
     ''' have to find seminar index from Blackboard data file (don't count on position!)'''
     semcol = data.columns.values.tolist().index('Seminar Attendance')
     # numeach = data.ix[:,3:].sum(axis=1,numeric_only=True) #old per seminar spreadsheet
@@ -32,6 +33,7 @@ def semrep(data, name, email):
 
     sep = email+'; '
 
+    di: Union[int, List[str]]
     if name:
         di = ['﻿"Last Name"', 'First Name']
 
@@ -61,8 +63,8 @@ if __name__ == '__main__':
     p.add_argument('infile', help='.xls filename')
     p.add_argument('--name', help='print name instead of email', action='store_true')
     p.add_argument('-e', '--email', help='text to append to end of username to make complete email address', default='')
-    p = p.parse_args()
+    P = p.parse_args()
 
-    fn = p.infile
+    fn = P.infile
 
-    analyzeForms(fn, p.name, p.email)
+    analyzeForms(fn, P.name, P.email)

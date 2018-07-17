@@ -37,12 +37,12 @@ if __name__ == "__main__":
     p.add_argument('assignment', help='column to plot')
     p.add_argument('course', help='course name', nargs='?', default='')
     p.add_argument('-k', '--minmax', help='discard <>', nargs=2, type=float)
-    p = p.parse_args()
+    P = p.parse_args()
 
-    fn = Path(p.fn).expanduser()
+    fn = Path(P.fn).expanduser()
 
-    if p.course:
-        pat = f'{p.course}_*.csv'
+    if P.course:
+        pat = f'{P.course}_*.csv'
     else:
         pat = '*.csv'
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     stats = pd.DataFrame(index=years,
                          columns=['median', 'mean'])
     for f, y in zip(flist, years):
-        dasg = main(f, p.assignment, p.minmax)
+        dasg = main(f, P.assignment, P.minmax)
         prc = np.percentile(dasg, [10, 25, 75, 90])
         stats.at[y, '10th'] = prc[0]
         stats.at[y, '25th'] = prc[1]
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     ax = figure().gca()
     stats.plot(ax=ax)
     ax.set_xlabel('year')
-    ax.set_title(f'{p.course} {p.assignment}')
+    ax.set_title(f'{P.course} {P.assignment}')
     ax.axhline(12, linestyle='-.', color='grey')
     ax.set_ylabel('score')
 
