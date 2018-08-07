@@ -6,14 +6,14 @@ git:
   quiet: true
 
 python:
-  - 3.6
+- 3.6
 
 os:
-  - linux
+- linux
 
 install: pip install -e .[tests]
 
 script:
-  - flake8
-  - mypy . --ignore-missing-imports
+- flake8
+- mypy . --ignore-missing-imports
 
