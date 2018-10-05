@@ -5,14 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """
-Given spreadsheet with:
-sheets: choices, projects
-choices columns: choice one, choice two, choice three
-
 Michael Hirsch 2014
-Ref:
-http://stackoverflow.com/questions/22093006/python-pandas-filter-dataframe-by-applying-regular-expression
-http://pandas.pydata.org/pandas-docs/version/0.8.1/missing_data.html
 """
 
 
