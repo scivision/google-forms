@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.com/scivision/google-forms.svg?branch=master)](https://travis-ci.com/scivision/google-forms)
 
-# google-forms
+# Ggoogle Forms analysis
 
 Analysis of Google Forms results, used with Blackboard.
 
